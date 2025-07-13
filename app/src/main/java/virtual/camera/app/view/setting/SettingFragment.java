@@ -31,13 +31,10 @@ import virtual.camera.camera.MultiPreferences;
 import virtual.camera.app.util.AppUtil;
 import virtual.camera.app.util.HandlerUtil;
 import virtual.camera.app.util.ToastUtils;
+import virtual.camera.app.databinding.ActivityCameraSettingsBinding;
 
 public class SettingFragment extends BaseFragment {
-    private AppCompatButton mProtectMethodBtn, mSave;
-    private AppCompatTextView mProtectMethodText, mTip, mAudioText;
-    private AppCompatEditText mInput;
-    private SwitchCompat mAudioSwitch;
-    private AppCompatButton mChoiseVideo;
+    private ActivityCameraSettingsBinding binding;
     private PopupMenu mPopupMenu = null;
     private int mMethodType = 0;
     private boolean mHasOpenDocuments = false;
@@ -46,36 +43,22 @@ public class SettingFragment extends BaseFragment {
             registerForActivityResult(new ActivityResultContracts.GetContent(), this::onVideoChoiseDone);
 
     public void onVideoChoiseDone(Uri video) {
-        if (video == null) {
-        } else {
-            mInput.setText(video.toString());
+        if (video != null) {
             mHasOpenDocuments = true;
+            binding.protectPath.setText(video.toString());
         }
-        LogUtil.log("onVideoChoiseDone:" + video);
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.activity_camera_settings, container, false);
-        initView(view);
-        return view;
+        binding = ActivityCameraSettingsBinding.inflate(inflater, container, false);
+        initView();
+        return binding.getRoot();
     }
 
-    private void initView(View rootView) {
-        mProtectMethodBtn = rootView.findViewById(R.id.protect_method_btn);
-        mSave = rootView.findViewById(R.id.protect_save);
-        mProtectMethodText = rootView.findViewById(R.id.protect_method_text);
-        mTip = rootView.findViewById(R.id.protect_tip);
-        mInput = rootView.findViewById(R.id.protect_path);
-        mAudioText = rootView.findViewById(R.id.protect_audio);
-        mAudioSwitch = rootView.findViewById(R.id.protect_audio_switch);
-        mChoiseVideo = rootView.findViewById(R.id.protect_video_select);
-        mChoiseVideo.setOnClickListener(v -> {
-            openDocumentedResult.launch("video/*");
-        });
-
-        mProtectMethodBtn.setOnClickListener(new View.OnClickListener() {
+    private void initView() {
+        binding.protectMethodBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mPopupMenu = new PopupMenu(getActivitySafe(), view);
@@ -101,11 +84,15 @@ public class SettingFragment extends BaseFragment {
             }
         });
 
-        mSave.setOnClickListener(new View.OnClickListener() {
+        binding.protectSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 saveSettings();
             }
+        });
+
+        binding.protectVideoSelect.setOnClickListener(v -> {
+            openDocumentedResult.launch("video/*");
         });
 
         int method_type = MultiPreferences.getInstance().getInt("method_type", MethodType.TYPE_DISABLE_CAMERA);
@@ -140,7 +127,7 @@ public class SettingFragment extends BaseFragment {
             MultiPreferences.getInstance().setInt("method_type", mMethodType);
             MultiPreferences.getInstance().setString("video_path_local", u);
             MultiPreferences.getInstance().setString("video_path_local_final_out", outPath);
-            MultiPreferences.getInstance().setBoolean("video_path_local_audio_enable", mAudioSwitch.isChecked());
+            MultiPreferences.getInstance().setBoolean("video_path_local_audio_enable", binding.protectAudioSwitch.isChecked());
             ToastUtils.showToast("Save Success...:");
             return true;
         } catch (Throwable e) {
@@ -148,7 +135,7 @@ public class SettingFragment extends BaseFragment {
             HandlerUtil.runOnMain(new Runnable() {
                 @Override
                 public void run() {
-                    mInput.setText("");
+                    binding.protectPath.setText("");
                 }
             });
             ToastUtils.showToast("Video handing failed:" + e);
@@ -175,42 +162,42 @@ public class SettingFragment extends BaseFragment {
         mMethodType = type;
         switch (type) {
             case MethodType.TYPE_DISABLE_CAMERA:
-                mProtectMethodText.setText(R.string.protect_method_disable_camera);
-                mTip.setText(R.string.protect_tip_disable);
-                mInput.setVisibility(View.GONE);
-                mChoiseVideo.setVisibility(View.GONE);
-                mAudioText.setVisibility(View.GONE);
-                mAudioSwitch.setVisibility(View.GONE);
+                binding.protectMethodText.setText(R.string.protect_method_disable_camera);
+                binding.protectTip.setText(R.string.protect_tip_disable);
+                binding.protectPath.setVisibility(View.GONE);
+                binding.protectVideoSelect.setVisibility(View.GONE);
+                binding.protectAudio.setVisibility(View.GONE);
+                binding.protectAudioSwitch.setVisibility(View.GONE);
                 break;
             case MethodType.TYPE_LOCAL_VIDEO:
-                mProtectMethodText.setText(R.string.protect_method_local);
-                mTip.setText(R.string.protect_tip_local);
-                mInput.setVisibility(View.VISIBLE);
-                mChoiseVideo.setVisibility(View.VISIBLE);
-                mChoiseVideo.setEnabled(true);
-                mChoiseVideo.setText(R.string.choise_video);
-                mAudioText.setVisibility(View.VISIBLE);
-                mAudioSwitch.setVisibility(View.VISIBLE);
-                mInput.setHint("");
-                mInput.setEnabled(false);
+                binding.protectMethodText.setText(R.string.protect_method_local);
+                binding.protectTip.setText(R.string.protect_tip_local);
+                binding.protectPath.setVisibility(View.VISIBLE);
+                binding.protectVideoSelect.setVisibility(View.VISIBLE);
+                binding.protectVideoSelect.setEnabled(true);
+                binding.protectVideoSelect.setText(R.string.choise_video);
+                binding.protectAudio.setVisibility(View.VISIBLE);
+                binding.protectAudioSwitch.setVisibility(View.VISIBLE);
+                binding.protectPath.setHint("");
+                binding.protectPath.setEnabled(false);
                 if (mHasOpenDocuments) {
-                    mInput.setText(MultiPreferences.getInstance().getString("video_path_local", ""));
+                    binding.protectPath.setText(MultiPreferences.getInstance().getString("video_path_local", ""));
                 } else {
-                    mInput.setText("");
+                    binding.protectPath.setText("");
                 }
-                mAudioSwitch.setChecked(MultiPreferences.getInstance().getBoolean("video_path_local_audio_enable", true));
+                binding.protectAudioSwitch.setChecked(MultiPreferences.getInstance().getBoolean("video_path_local_audio_enable", true));
                 break;
             case MethodType.TYPE_NETWORK_VIDEO:
-                mProtectMethodText.setText(R.string.protect_method_network);
-                mTip.setText(R.string.protect_tip_network);
-                mInput.setVisibility(View.VISIBLE);
-                mChoiseVideo.setVisibility(View.GONE);
-                mAudioText.setVisibility(View.VISIBLE);
-                mAudioSwitch.setVisibility(View.VISIBLE);
-                mInput.setHint(R.string.protect_path_hint);
-                mInput.setEnabled(true);
-                mInput.setText(MultiPreferences.getInstance().getString("video_path_network", ""));
-                mAudioSwitch.setChecked(MultiPreferences.getInstance().getBoolean("video_path_network_audio_enable", true));
+                binding.protectMethodText.setText(R.string.protect_method_network);
+                binding.protectTip.setText(R.string.protect_tip_network);
+                binding.protectPath.setVisibility(View.VISIBLE);
+                binding.protectVideoSelect.setVisibility(View.GONE);
+                binding.protectAudio.setVisibility(View.VISIBLE);
+                binding.protectAudioSwitch.setVisibility(View.VISIBLE);
+                binding.protectPath.setHint(R.string.protect_path_hint);
+                binding.protectPath.setEnabled(true);
+                binding.protectPath.setText(MultiPreferences.getInstance().getString("video_path_network", ""));
+                binding.protectAudioSwitch.setChecked(MultiPreferences.getInstance().getBoolean("video_path_network_audio_enable", true));
                 break;
         }
     }
@@ -223,7 +210,7 @@ public class SettingFragment extends BaseFragment {
                 ToastUtils.showToast("Save Success...");
                 break;
             case MethodType.TYPE_LOCAL_VIDEO:
-                if (TextUtils.isEmpty(mInput.getText())) {
+                if (TextUtils.isEmpty(binding.protectPath.getText())) {
                     ToastUtils.showToast("Video not set...");
                     return;
                 }
@@ -234,7 +221,7 @@ public class SettingFragment extends BaseFragment {
                 new Thread() {
                     @Override
                     public void run() {
-                        copyLocalVideo(mInput.getText().toString());
+                        copyLocalVideo(binding.protectPath.getText().toString());
                         HandlerUtil.runOnMain(new Runnable() {
                             @Override
                             public void run() {
@@ -249,17 +236,17 @@ public class SettingFragment extends BaseFragment {
                 }.start();
                 break;
             case MethodType.TYPE_NETWORK_VIDEO:
-                if (TextUtils.isEmpty(mInput.getText())) {
+                if (TextUtils.isEmpty(binding.protectPath.getText())) {
                     ToastUtils.showToast("Video not set...");
                     return;
                 }
-                if (!mInput.getText().toString().toLowerCase().startsWith("http")) {
+                if (!binding.protectPath.getText().toString().toLowerCase().startsWith("http")) {
                     ToastUtils.showToast("Video url should start with http or https");
                     return;
                 }
                 MultiPreferences.getInstance().setInt("method_type", mMethodType);
-                MultiPreferences.getInstance().setString("video_path_network", mInput.getText().toString());
-                MultiPreferences.getInstance().setBoolean("video_path_network_audio_enable", mAudioSwitch.isChecked());
+                MultiPreferences.getInstance().setString("video_path_network", binding.protectPath.getText().toString());
+                MultiPreferences.getInstance().setBoolean("video_path_network_audio_enable", binding.protectAudioSwitch.isChecked());
                 ToastUtils.showToast("Save Success...");
                 break;
         }

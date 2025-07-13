@@ -1,9 +1,10 @@
 package virtual.camera.app.widget
 
 import android.content.Context
+import android.view.LayoutInflater
 import android.view.MotionEvent
 import com.imuxuan.floatingview.FloatingMagnetView
-import virtual.camera.app.R
+import virtual.camera.app.databinding.ViewFloatRockerBinding
 
 /**
  *
@@ -14,20 +15,17 @@ import virtual.camera.app.R
 class EnFloatView(mContext: Context) : FloatingMagnetView(mContext) {
 
     private val TAG = "RockerManager"
-
-    private var rockerView: RockerView? = null
+    private lateinit var binding: ViewFloatRockerBinding
 
     private var mListener: LocationListener? = null
 
     init {
-        inflate(mContext, R.layout.view_float_rocker, this)
+        binding = ViewFloatRockerBinding.inflate(LayoutInflater.from(mContext), this, true)
         initRockerView()
     }
 
     private fun initRockerView() {
-
-        rockerView = findViewById(R.id.rocker)
-        rockerView?.setListener { type, currentAngle, currentDistance ->
+        binding.rocker.setListener { type, currentAngle, currentDistance ->
             if (type == RockerView.EVENT_CLOCK && currentAngle != -1F) {
                 val realAngle = currentAngle
                 val realDistance = currentDistance * 0.001F
@@ -41,9 +39,9 @@ class EnFloatView(mContext: Context) : FloatingMagnetView(mContext) {
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         if (event?.action == MotionEvent.ACTION_DOWN) {
-            rockerView?.setCanMove(false)
+            binding.rocker.setCanMove(false)
         } else if (event?.action == MotionEvent.ACTION_UP) {
-            rockerView?.setCanMove(true)
+            binding.rocker.setCanMove(true)
         }
         return super.onTouchEvent(event)
     }
