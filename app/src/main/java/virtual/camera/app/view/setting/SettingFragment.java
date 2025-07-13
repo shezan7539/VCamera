@@ -31,6 +31,7 @@ import virtual.camera.camera.MultiPreferences;
 import virtual.camera.app.util.AppUtil;
 import virtual.camera.app.util.HandlerUtil;
 import virtual.camera.app.util.ToastUtils;
+import virtual.camera.app.databinding.ActivityCameraSettingsBinding;
 
 public class SettingFragment extends BaseFragment {
     private AppCompatButton mProtectMethodBtn, mSave;
@@ -57,20 +58,26 @@ public class SettingFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.activity_camera_settings, container, false);
-        initView(view);
-        return view;
+        binding = ActivityCameraSettingsBinding.inflate(inflater, container, false);
+        initView();
+        return binding.getRoot();
     }
 
-    private void initView(View rootView) {
-        mProtectMethodBtn = rootView.findViewById(R.id.protect_method_btn);
-        mSave = rootView.findViewById(R.id.protect_save);
-        mProtectMethodText = rootView.findViewById(R.id.protect_method_text);
-        mTip = rootView.findViewById(R.id.protect_tip);
-        mInput = rootView.findViewById(R.id.protect_path);
-        mAudioText = rootView.findViewById(R.id.protect_audio);
-        mAudioSwitch = rootView.findViewById(R.id.protect_audio_switch);
-        mChoiseVideo = rootView.findViewById(R.id.protect_video_select);
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
+
+    private void initView() {
+        mProtectMethodBtn = binding.protectMethodBtn;
+        mSave = binding.protectSave;
+        mProtectMethodText = binding.protectMethodText;
+        mTip = binding.protectTip;
+        mInput = binding.protectPath;
+        mAudioText = binding.protectAudio;
+        mAudioSwitch = binding.protectAudioSwitch;
+        mChoiseVideo = binding.protectVideoSelect;
         mChoiseVideo.setOnClickListener(v -> {
             openDocumentedResult.launch("video/*");
         });
