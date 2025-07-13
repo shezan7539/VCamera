@@ -1,6 +1,8 @@
 package virtual.camera.app.view.setting;
 
-import android.app.ProgressDialog;
+import androidx.appcompat.app.AlertDialog;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import android.widget.ProgressBar;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -234,9 +236,10 @@ public class SettingFragment extends BaseFragment {
                     ToastUtils.showToast("Video not set...");
                     return;
                 }
-                ProgressDialog progressDialog = new ProgressDialog(getActivitySafe(), ProgressDialog.STYLE_SPINNER);
-                progressDialog.setCancelable(false);
-                progressDialog.setMessage("Handing video...");
+                AlertDialog progressDialog = new MaterialAlertDialogBuilder(getActivitySafe())
+                        .setView(new ProgressBar(getActivitySafe()))
+                        .setCancelable(false)
+                        .create();
                 progressDialog.show();
                 new Thread() {
                     @Override

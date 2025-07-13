@@ -18,6 +18,7 @@ import virtual.camera.app.databinding.ActivityListBinding
 import virtual.camera.app.util.InjectionUtil
 import virtual.camera.app.util.inflate
 import virtual.camera.app.view.base.BaseActivity
+import androidx.activity.OnBackPressedCallback
 
 
 class ListActivity : BaseActivity() {
@@ -45,6 +46,17 @@ class ListActivity : BaseActivity() {
 
         initSearchView()
         initViewModel()
+
+        // Handle back press with Dispatcher (replaces deprecated onBackPressed)
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (viewBinding.searchView.isSearchOpen) {
+                    viewBinding.searchView.closeSearch()
+                } else {
+                    finish()
+                }
+            }
+        })
     }
 
     private fun initSearchView() {
@@ -126,13 +138,7 @@ class ListActivity : BaseActivity() {
     }
 
 
-    override fun onBackPressed() {
-        if (viewBinding.searchView.isSearchOpen) {
-            viewBinding.searchView.closeSearch()
-        } else {
-            super.onBackPressed()
-        }
-    }
+    // Removed deprecated onBackPressed override; handled via dispatcher above.
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_list, menu)

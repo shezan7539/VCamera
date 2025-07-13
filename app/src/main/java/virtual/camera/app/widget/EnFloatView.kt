@@ -2,8 +2,9 @@ package virtual.camera.app.widget
 
 import android.content.Context
 import android.view.MotionEvent
+import android.view.LayoutInflater
 import com.imuxuan.floatingview.FloatingMagnetView
-import virtual.camera.app.R
+import virtual.camera.app.databinding.ViewFloatRockerBinding
 
 /**
  *
@@ -17,16 +18,18 @@ class EnFloatView(mContext: Context) : FloatingMagnetView(mContext) {
 
     private var rockerView: RockerView? = null
 
+    private val binding: ViewFloatRockerBinding =
+        ViewFloatRockerBinding.inflate(LayoutInflater.from(mContext), this, true)
+
     private var mListener: LocationListener? = null
 
     init {
-        inflate(mContext, R.layout.view_float_rocker, this)
         initRockerView()
     }
 
     private fun initRockerView() {
 
-        rockerView = findViewById(R.id.rocker)
+        rockerView = binding.rocker
         rockerView?.setListener { type, currentAngle, currentDistance ->
             if (type == RockerView.EVENT_CLOCK && currentAngle != -1F) {
                 val realAngle = currentAngle
