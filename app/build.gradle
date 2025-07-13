@@ -52,12 +52,10 @@ tasks.withType(Javadoc) {
 }
 
 dependencies {
-    implementation platform('com.google.android.material:material-bom:1.12.0')
-    implementation platform('androidx.compose:compose-bom:2024.05.00')
     implementation fileTree(dir: "libs", include: ["*.jar", "*.aar"])
 
     //android
-    implementation 'com.google.android.material:material'
+    implementation 'com.google.android.material:material:1.12.0'
     implementation 'androidx.core:core-ktx:1.13.1'
     implementation 'androidx.appcompat:appcompat:1.7.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
@@ -73,13 +71,8 @@ dependencies {
     implementation 'com.tbuonomo:dotsindicator:4.3'
     implementation 'com.afollestad.material-dialogs:core:3.3.0'
     implementation 'com.afollestad.material-dialogs:input:3.3.0'
-    implementation 'com.github.nukc.stateview:kotlin:2.2.0'
-    implementation 'com.roger.catloadinglibrary:catloadinglibrary:1.0.9'
     implementation 'com.github.Ferfalk:SimpleSearchView:0.2.0'
     implementation 'com.github.Othershe:CornerLabelView:1.0.0'
     implementation 'org.osmdroid:osmdroid-android:6.1.16'
     implementation 'com.gitee.cbfg5210:RVAdapter:0.3.7'
-    implementation 'com.imuxuan:floatingview:1.6'
-
-    implementation 'virtual.camera.camera:camera:1.0.0'
 }

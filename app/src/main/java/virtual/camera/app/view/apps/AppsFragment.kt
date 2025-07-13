@@ -27,6 +27,7 @@ import virtual.camera.app.view.base.LoadingActivity
 import virtual.camera.app.view.main.MainActivity
 import java.util.*
 import kotlin.math.abs
+import virtual.camera.app.widget.StateView
 
 
 /**

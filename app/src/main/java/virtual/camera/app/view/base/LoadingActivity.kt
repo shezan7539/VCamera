@@ -1,7 +1,7 @@
 package virtual.camera.app.view.base
 
 import android.view.KeyEvent
-import com.roger.catloadinglibrary.CatLoadingView
+import virtual.camera.app.widget.CatLoadingView
 import virtual.camera.app.R
 
 abstract class LoadingActivity : BaseActivity() {

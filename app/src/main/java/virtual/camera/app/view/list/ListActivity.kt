@@ -18,6 +18,7 @@ import virtual.camera.app.databinding.ActivityListBinding
 import virtual.camera.app.util.InjectionUtil
 import virtual.camera.app.util.inflate
 import virtual.camera.app.view.base.BaseActivity
+import virtual.camera.app.widget.StateView
 
 
 class ListActivity : BaseActivity() {
