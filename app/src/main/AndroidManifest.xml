@@ -113,7 +113,8 @@
         android:networkSecurityConfig="@xml/network_security_config"
         android:supportsRtl="true"
         android:theme="@style/Theme.VCamera"
-        tools:targetApi="n">
+        android:exported="false"
+        tools:targetApi="34">
         <activity android:name="virtual.camera.app.view.setting.SettingActivity" android:exported="false"/>
         <activity android:name="virtual.camera.app.view.gms.GmsManagerActivity" android:exported="false"/>
         <activity
