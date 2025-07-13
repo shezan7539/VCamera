@@ -81,6 +81,5 @@ dependencies {
     implementation 'com.gitee.cbfg5210:RVAdapter:0.3.7'
     implementation 'com.imuxuan:floatingview:1.6'
 
-    implementation project(':opensdk')
     implementation 'virtual.camera.camera:camera:1.0.0'
 }
