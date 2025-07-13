@@ -4,6 +4,7 @@ plugins {
 }
 
 android {
+    namespace "virtual.camera.app"
     compileSdk rootProject.ext.compileSdkVersion
 
     defaultConfig {
