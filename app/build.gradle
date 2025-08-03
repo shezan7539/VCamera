@@ -5,22 +5,18 @@ plugins {
 
 android {
     namespace 'virtual.camera.app'
-    compileSdk rootProject.ext.compileSdkVersion
+    compileSdk 35
 
     defaultConfig {
-        applicationId rootProject.ext.masterPkg
-        minSdk rootProject.ext.minSdkVersion
-        targetSdk rootProject.ext.targetSdkVersion
-        versionCode rootProject.ext.versionCode
-        versionName rootProject.ext.versionName
+        applicationId "virtual.camera.app"
+        minSdk 26
+        targetSdk 35
+        versionCode 100
+        versionName "1.0.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
-        debug {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
@@ -29,70 +25,55 @@ android {
 
     buildFeatures {
         viewBinding true
+        buildConfig true
     }
 
-    kotlinOptions {
-        jvmTarget = '17'
-    }
-    
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }
-    
+
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+
     testOptions {
         unitTests.returnDefaultValues = true
     }
-    
+
     lint {
-        checkReleaseBuilds false
         abortOnError false
-        warningsAsErrors false
-        disable "UnusedResources", 'RestrictedApi'
-        textOutput "stdout"
-        textReport false
-        check 'NewApi', 'InlinedApi'
     }
-}
 
-tasks.withType(Javadoc) {
-    options.addStringOption('Xdoclint:none', '-quiet')
-    options.addStringOption('encoding', 'UTF-8')
-    options.addStringOption('charSet', 'UTF-8')
-}
-
-repositories {
-    flatDir {
-        dirs 'libs'
+    packagingOptions {
+        resources.excludes.add("META-INF/DEPENDENCIES")
     }
 }
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar", "*.aar"])
 
-    // AndroidX BOM for consistent dependency versions
-    implementation platform('androidx.core:core-bom:2023.10.01')
-    implementation 'androidx.core:core-ktx'
-    implementation 'androidx.appcompat:appcompat'
-    implementation 'androidx.constraintlayout:constraintlayout'
-    implementation "androidx.recyclerview:recyclerview"
-    implementation 'androidx.viewpager2:viewpager2'
-    implementation "androidx.activity:activity-ktx"
-    implementation "androidx.fragment:fragment-ktx"
-    implementation "androidx.preference:preference-ktx"
-    
-    // Lifecycle BOM
-    implementation platform('androidx.lifecycle:lifecycle-bom:2023.10.01')
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx"
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx"
-    
+    // AndroidX Core
+    implementation 'androidx.core:core-ktx:1.15.0'
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.2.0'
+    implementation 'androidx.recyclerview:recyclerview:1.3.2'
+    implementation 'androidx.viewpager2:viewpager2:1.1.0'
+    implementation 'androidx.activity:activity-ktx:1.9.3'
+    implementation 'androidx.fragment:fragment-ktx:1.8.5'
+    implementation 'androidx.preference:preference-ktx:1.2.1'
+
+    // Lifecycle Components
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.8.7'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.8.7'
+
     // Material Design
-    implementation 'com.google.android.material:material:1.11.0'
-    
+    implementation 'com.google.android.material:material:1.12.0'
+
     // Kotlin Coroutines
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3"
-    
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0'
+
     // Third-party libraries
     implementation 'com.tbuonomo:dotsindicator:4.3'
     implementation 'com.afollestad.material-dialogs:core:3.3.0'
@@ -105,6 +86,6 @@ dependencies {
     implementation 'com.gitee.cbfg5210:RVAdapter:0.3.7'
     implementation 'com.imuxuan:floatingview:1.6'
 
-    implementation project(':opensdk')
-    implementation 'virtual.camera.camera:camera:1.0.0'
+    // implementation project(':opensdk')
+    // implementation 'virtual.camera.camera:camera:1.0.0'
 }
